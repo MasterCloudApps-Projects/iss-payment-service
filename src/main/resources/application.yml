@@ -1,0 +1,40 @@
+spring:
+  jackson.serialization.indent_output: true
+  application:
+    name: iss-payment-service
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:postgres}
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:postgres123}
+    hikari:
+      connection-timeout: 2000
+      initialization-fail-timeout: 0
+    jpa.database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: ${KAFKA_HOST:localhost}:${KAFKA_PORT:9092}
+      bindings:
+        policy-registered-in:
+          destination: policy-registered
+          contentType: application/json
+          group: policy
+          consumer:
+            partitioned: true
+            concurrency: 5
+            auto.offset.reset: earliest 
+        policy-terminated-in:
+          destination: policy-terminated
+          contentType: application/json
+          group: policy
+          consumer:
+            partitioned: true
+            concurrency: 5
+            auto.offset.reset: earliest 
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

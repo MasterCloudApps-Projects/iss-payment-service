@@ -1,0 +1,64 @@
+version: '3'
+
+services:      
+  iss-payment-service:
+    container_name: iss-payment-service
+    image: iss-payment-service
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile
+    environment:
+      - POSTGRES_HOST=postgres_db      
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres123
+      - POSTGRES_PORT=5432
+      - KAFKA_HOST=kafka
+      - KAFKA_PORT=9092     
+    ports:
+      - "8084:8084"
+    depends_on:
+      - postgres_db
+      - kafka
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    hostname: zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    hostname: kafka
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  postgres_db:
+    image: "postgres:9.6-alpine"
+    container_name: postgres_db
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+    - "5432:5432"
+    environment:
+      - POSTGRES_HOST=postgres_db      
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres123
+ 
+volumes:
+  postgres-data:
