@@ -23,15 +23,7 @@ spring:
           consumer:
             partitioned: true
             concurrency: 5
-            auto.offset.reset: earliest 
-        policy-terminated-in:
-          destination: policy-terminated
-          contentType: application/json
-          group: policy
-          consumer:
-            partitioned: true
-            concurrency: 5
-            auto.offset.reset: earliest 
+            auto.offset.reset: earliest
 
 management:
   endpoints:

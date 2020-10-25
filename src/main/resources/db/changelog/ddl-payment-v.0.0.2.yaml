@@ -1,0 +1,71 @@
+databaseChangeLog:
+        
+- changeSet:
+    id: 03_create_accounting_entry_table
+    author: fpoirier
+    preConditions:
+      - onFail: MARK_RAN
+        not:
+          tableExists:
+            schemaName: payment
+            tableName: accounting_entry
+    changes:
+    - createTable:
+        schemaName: payment
+        tableName: accounting_entry
+        columns:
+        - column:
+            name: id
+            type: UUID
+            constraints:
+                primaryKeyName: accounting_entry_pkey
+                primaryKey: true
+                nullable: false
+        - column:
+            name: policy_account_id
+            type: UUID
+            constraints:
+                nullable: false
+        - column:
+                name: entry_type
+                type: VARCHAR(20)
+                constraints:
+                    nullable: false
+        - column:
+                name: amount
+                type: NUMERIC(19, 2)
+                constraints:
+                    nullable: false
+        - column:
+                name: creation_date
+                type: TIMESTAMP
+                constraints:
+                    nullable: true
+        - column:
+                name: effective_date
+                type: TIMESTAMP
+                constraints:
+                    nullable: true
+                    
+- changeSet:
+    id: 04_add_policy_account_foreignkey_constraint_in_accounting_entry
+    author: fpoirier
+    preConditions:
+      - onFail: MARK_RAN
+        not:
+          tableExists:
+            schemaName: payment
+            tableName: accounting_entry
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: policy_account_id
+        baseTableName: accounting_entry
+        baseTableSchemaName: payment
+        constraintName: fk_accounting_entry_policy_account
+        deferrable: true
+        initiallyDeferred: true
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: policy_account
+        referencedTableSchemaName: payment

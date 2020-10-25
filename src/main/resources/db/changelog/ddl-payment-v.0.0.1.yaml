@@ -1,0 +1,49 @@
+databaseChangeLog:
+- changeSet:
+    id: 01_payment_create_schema
+    author: fpoirier
+    changes:
+    - sql:
+        sql: CREATE SCHEMA IF NOT EXISTS payment
+        
+- changeSet:
+    id: 02_create_policy_account_table
+    author: fpoirier
+    preConditions:
+      - onFail: MARK_RAN
+        not:
+          tableExists:
+            schemaName: payment
+            tableName: policy_account
+    changes:
+    - createTable:
+        schemaName: payment
+        tableName: policy_account
+        columns:
+        - column:
+            name: id
+            type: UUID
+            constraints:
+                primaryKeyName: policy_account_pkey
+                primaryKey: true
+                nullable: false
+        - column:
+                name: policy_number
+                type: VARCHAR(20)
+                constraints:
+                    nullable: false
+        - column:
+                name: policy_account_number
+                type: VARCHAR(20)
+                constraints:
+                    nullable: false
+        - column:
+                name: created
+                type: TIMESTAMP
+                constraints:
+                    nullable: true
+        - column:
+                name: updated
+                type: TIMESTAMP
+                constraints:
+                    nullable: true
