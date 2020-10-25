@@ -6,8 +6,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +18,9 @@ import org.mockito.Mockito;
 
 import es.urjc.code.payment.application.domain.PolicyAccount;
 import es.urjc.code.payment.exception.EntityNotFoundException;
+import es.urjc.code.payment.infrastructure.adapter.repository.entity.ExpectedPaymentEntity;
+import es.urjc.code.payment.infrastructure.adapter.repository.entity.InPaymentEntity;
+import es.urjc.code.payment.infrastructure.adapter.repository.entity.OutPaymentEntity;
 import es.urjc.code.payment.infrastructure.adapter.repository.entity.PolicyAccountEntity;
 import es.urjc.code.payment.infrastructure.adapter.repository.jpa.PolicyAccountJpaRepository;
 
@@ -124,13 +129,28 @@ class PolicyAccountRepositoryAdapterTest {
     }
     
 	private PolicyAccountEntity getPolicyAccountEntity() {
+		
 		return new PolicyAccountEntity.Builder()
 				                      .withPolicyAccountNumber(POLICY_ACCOUNT_NUMBER)
 				                      .withPolicyNumber(POLICY_NUMBER)
 				                      .withCreated(CREATED_DATE)
 				                      .withUpdated(CREATED_DATE.plusDays(1L))
+				                      .withEntries(new HashSet<>(Arrays.asList(getExpectedPaymentEntity(),getInPaymentEntity(),getOutPaymentEntity())))
 				                      .build();
 	}
 
+	private ExpectedPaymentEntity getExpectedPaymentEntity() {
+		return new ExpectedPaymentEntity.Builder().withAmount(new BigDecimal(10))
+		.withCreationDate(CREATED_DATE).withEffectiveDate(CREATED_DATE).build();
+	}
 
+	private InPaymentEntity getInPaymentEntity() {
+		return new InPaymentEntity.Builder().withAmount(new BigDecimal(10))
+		.withCreationDate(CREATED_DATE).withEffectiveDate(CREATED_DATE).build();
+	}
+	
+	private OutPaymentEntity getOutPaymentEntity() {
+		return new OutPaymentEntity.Builder().withAmount(new BigDecimal(10))
+		.withCreationDate(CREATED_DATE).withEffectiveDate(CREATED_DATE).build();
+	}
 }
