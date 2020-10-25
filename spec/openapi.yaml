@@ -1,0 +1,147 @@
+openapi: 3.0.1
+info:
+  title: Payment service API
+  description: This is a payment service API using springdoc-openapi and OpenAPI 3.
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8084'
+    description: Generated server url
+tags:
+  - name: payment
+    description: the Payment API
+paths:
+  '/api/v1/accounts/{accountNumber}':
+    get:
+      tags:
+        - payment
+      summary: Find policy account balance by account number
+      description: Returns a policy account balancet
+      operationId: accountBalance
+      parameters:
+        - name: accountNumber
+          in: path
+          description: Account number. Cannot be empty.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PolicyAccountBalanceDto'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Product not found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service Unavailable
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/v1/accounts:
+    get:
+      tags:
+        - payment
+      summary: Find all policy account
+      description: Find all policy account
+      operationId: accounts
+      responses:
+        '200':
+          description: successful operation
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PolicyAccountDto'
+        '400':
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service Unavailable
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+    PolicyAccountBalanceDto:
+      type: object
+      properties:
+        policyAccountNumber:
+          type: string
+        policyNumber:
+          type: string
+        balance:
+          type: number
+        created:
+          type: string
+          format: date-time
+        updated:
+          type: string
+          format: date-time
+    PolicyAccountDto:
+      type: object
+      properties:
+        policyAccountNumber:
+          type: string
+        policyNumber:
+          type: string
+        created:
+          type: string
+          format: date-time
+        updated:
+          type: string
+          format: date-time
