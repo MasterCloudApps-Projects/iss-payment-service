@@ -14,7 +14,7 @@ import org.mockito.Mockito;
 import es.urjc.code.payment.application.domain.PolicyAccount;
 import es.urjc.code.payment.application.port.outgoing.PolicyAccountLoadPort;
 
-public class PolicyAccountServiceTest {
+class PolicyAccountServiceTest {
 	
 	public static final String POLICY_ACCOUNT_NUMBER = "1313123";
 	public static final String POLICY_NUMBER = "P1212121";

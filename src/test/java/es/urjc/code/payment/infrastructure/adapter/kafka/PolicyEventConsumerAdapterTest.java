@@ -18,7 +18,7 @@ import es.urjc.code.payment.application.port.outgoing.PolicyAccountUpdatePort;
 import es.urjc.code.payment.service.api.v1.events.PolicyRegisteredEvent;
 import es.urjc.code.payment.service.api.v1.events.dto.PolicyDto;
 
-public class PolicyEventConsumerAdapterTest {
+class PolicyEventConsumerAdapterTest {
 
 	public static final String POLICY_NUMBER = "P1212121";
 	private PolicyAccountLoadPort policyAccountLoadPort;

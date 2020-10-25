@@ -16,7 +16,7 @@ import es.urjc.code.payment.application.port.incoming.GetAccountBalanceUSeCase;
 import es.urjc.code.payment.service.api.v1.dto.PolicyAccountBalanceDto;
 import es.urjc.code.payment.service.api.v1.dto.PolicyAccountDto;
 
-public class PaymentControllerTest {
+class PaymentControllerTest {
 
 	public static final String POLICY_ACCOUNT_NUMBER = "1313123";
 	public static final String POLICY_NUMBER = "P1212121";
@@ -53,10 +53,10 @@ public class PaymentControllerTest {
 		var response = this.sut.accountBalance(POLICY_ACCOUNT_NUMBER);
 		// then
 		verify(getAccountBalanceUSeCase).getAccountBalance(POLICY_ACCOUNT_NUMBER);
-		assertEquals(response.getBody().getPolicyAccountNumber(),POLICY_ACCOUNT_NUMBER);
-		assertEquals(response.getBody().getPolicyNumber(),POLICY_NUMBER);
-		assertEquals(response.getBody().getCreated(),CREATED_DATE);
-		assertEquals(response.getBody().getUpdated(),CREATED_DATE.plusDays(1L));
+		assertEquals(POLICY_ACCOUNT_NUMBER,response.getBody().getPolicyAccountNumber());
+		assertEquals(POLICY_NUMBER,response.getBody().getPolicyNumber());
+		assertEquals(CREATED_DATE,response.getBody().getCreated());
+		assertEquals(CREATED_DATE.plusDays(1L),response.getBody().getUpdated());
 	}
 	
     private PolicyAccountDto getPolicyAccountDto() {
