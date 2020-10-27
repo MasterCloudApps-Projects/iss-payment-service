@@ -76,7 +76,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/PolicyAccountDto'
+                  $ref: '#/components/schemas/PolicyAccountDtoList'
         '400':
           description: Bad Request
           content:
@@ -128,10 +128,10 @@ components:
           type: number
         created:
           type: string
-          format: date-time
+          format: date
         updated:
           type: string
-          format: date-time
+          format: date
     PolicyAccountDto:
       type: object
       properties:
@@ -141,7 +141,16 @@ components:
           type: string
         created:
           type: string
-          format: date-time
+          format: date
         updated:
           type: string
-          format: date-time
+          format: date
+    PolicyAccountDtoList:
+      required:
+        - accounts
+      type: object
+      properties:
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/PolicyAccountDto'

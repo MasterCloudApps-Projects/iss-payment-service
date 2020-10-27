@@ -120,11 +120,6 @@
 			<version>${testcontainer.version}</version>
 			<scope>test</scope>
 		</dependency>
-	    <dependency>
-	      <groupId>org.apache.kafka</groupId>
-	      <artifactId>kafka-clients</artifactId>
-	      <scope>test</scope>
-	    </dependency>				
 		<!-- test container support for postgresql module -->
 		<dependency>
 			<groupId>org.testcontainers</groupId>
