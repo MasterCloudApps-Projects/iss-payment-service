@@ -1,5 +1,7 @@
 package es.urjc.code.payment.infrastructure.adapter.kafka;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.stereotype.Service;
@@ -35,7 +37,7 @@ public class PolicyEventConsumerAdapter implements PolicyEventConsumerPort {
 	}
 	
     private void createAccount(PolicyDto policy) {
-        PolicyAccount newAccount = new PolicyAccount();
+        PolicyAccount newAccount = new PolicyAccount.Builder().withPolicyNumber(policy.getNumber()).withPolicyAccountNumber(UUID.randomUUID().toString()).build();
         newAccount.expectedPayment(policy.getTotalPremium(),policy.getFrom());
         policyAccountUpdatePort.save(newAccount);
     }
