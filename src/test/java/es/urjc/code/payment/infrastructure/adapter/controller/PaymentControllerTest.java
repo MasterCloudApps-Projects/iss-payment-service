@@ -13,6 +13,7 @@ import org.mockito.Mockito;
 
 import es.urjc.code.payment.application.port.incoming.FindAllPolicyAccountUseCase;
 import es.urjc.code.payment.application.port.incoming.GetAccountBalanceUSeCase;
+import es.urjc.code.payment.service.api.v1.dto.PolicyAccountDtoList;
 import es.urjc.code.payment.service.api.v1.dto.PolicyAccountBalanceDto;
 import es.urjc.code.payment.service.api.v1.dto.PolicyAccountDto;
 
@@ -37,12 +38,13 @@ class PaymentControllerTest {
 	void shouldBeFindAllAccounts() {
 		// given
 		final var policyAccountDtos = Arrays.asList(getPolicyAccountDto());
-		when(findAllPolicyAccountUseCase.findAll()).thenReturn(policyAccountDtos);				
+		final PolicyAccountDtoList list = new PolicyAccountDtoList.Builder().withAccounts(policyAccountDtos).build();
+		when(findAllPolicyAccountUseCase.findAll()).thenReturn(list);				
 		// when
 		var response = this.sut.accounts();
 		// then
 		verify(findAllPolicyAccountUseCase).findAll();
-		assertEquals(response.getBody(),policyAccountDtos);
+		assertEquals(response.getBody().getAccounts(),policyAccountDtos);
 	}
 	
 	@Test

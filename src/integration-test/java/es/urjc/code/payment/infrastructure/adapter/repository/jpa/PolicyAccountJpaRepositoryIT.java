@@ -29,11 +29,9 @@ class PolicyAccountJpaRepositoryIT extends AbstractContainerBaseTest {
 	@Autowired
 	private PolicyAccountJpaRepository policyAccountJpaRepository;
 	
-	private PolicyAccountEntity entity;
-
 	@BeforeEach
 	public void setUp() {
-		this.entity = new PolicyAccountEntity.Builder()
+		PolicyAccountEntity entity = new PolicyAccountEntity.Builder()
 				                             .withPolicyNumber(POLICY_NUMBER)
 				                             .withPolicyAccountNumber(POLICY_ACCOUNT_NUMBER)
 				                             .withCreated(CREATED_DATE)

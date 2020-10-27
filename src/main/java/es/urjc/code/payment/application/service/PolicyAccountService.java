@@ -1,7 +1,6 @@
 package es.urjc.code.payment.application.service;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +11,7 @@ import es.urjc.code.payment.application.domain.PolicyAccount;
 import es.urjc.code.payment.application.port.incoming.FindAllPolicyAccountUseCase;
 import es.urjc.code.payment.application.port.incoming.GetAccountBalanceUSeCase;
 import es.urjc.code.payment.application.port.outgoing.PolicyAccountLoadPort;
+import es.urjc.code.payment.service.api.v1.dto.PolicyAccountDtoList;
 import es.urjc.code.payment.service.api.v1.dto.PolicyAccountBalanceDto;
 import es.urjc.code.payment.service.api.v1.dto.PolicyAccountDto;
 
@@ -39,9 +39,9 @@ public class PolicyAccountService implements FindAllPolicyAccountUseCase ,GetAcc
 	}
 
 	@Override
-	public List<PolicyAccountDto> findAll() {
+	public PolicyAccountDtoList findAll() {
 		var policyAccounts = policyAccountLoadPort.findAll();
-		return policyAccounts.stream().map(this::mapToDto).collect(Collectors.toList());
+		return new PolicyAccountDtoList.Builder().withAccounts(policyAccounts.stream().map(this::mapToDto).collect(Collectors.toList())).build();
 	}
 
     private PolicyAccountDto mapToDto(PolicyAccount domain){

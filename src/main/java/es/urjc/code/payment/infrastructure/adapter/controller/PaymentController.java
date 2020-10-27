@@ -1,7 +1,5 @@
 package es.urjc.code.payment.infrastructure.adapter.controller;
 
-import java.util.List;
-
 import javax.validation.constraints.NotEmpty;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import es.urjc.code.payment.application.port.incoming.FindAllPolicyAccountUseCase;
 import es.urjc.code.payment.application.port.incoming.GetAccountBalanceUSeCase;
+import es.urjc.code.payment.service.api.v1.dto.PolicyAccountDtoList;
 import es.urjc.code.payment.service.api.v1.dto.PolicyAccountBalanceDto;
 import es.urjc.code.payment.service.api.v1.dto.PolicyAccountDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,16 +38,15 @@ public class PaymentController {
 	
 	@Operation(summary = "Find all policy account", description = "Find all policy account", tags = { "payment" })
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = PolicyAccountDto.class)))) })
+			@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(array = @ArraySchema(schema = @Schema(implementation = PolicyAccountDtoList.class)))) })
 	@GetMapping("/api/v1/accounts")
-	public ResponseEntity<List<PolicyAccountDto>> accounts() {
+	public ResponseEntity<PolicyAccountDtoList> accounts() {
 		return ResponseEntity.status(HttpStatus.OK).body(findAllPolicyAccountUseCase.findAll());
 	}
 	
 	@Operation(summary = "Find policy account balance by account number", description = "Returns a policy account balancet", tags = { "payment" })
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = PolicyAccountBalanceDto.class))),
-
 			@ApiResponse(responseCode = "404", description = "Product not found") })
 	@GetMapping("/api/v1/accounts/{accountNumber}")
 	public ResponseEntity<PolicyAccountBalanceDto> accountBalance(@Parameter(description = "Account number. Cannot be empty.", required = true) @PathVariable("accountNumber") @NotEmpty String accountNumber) {

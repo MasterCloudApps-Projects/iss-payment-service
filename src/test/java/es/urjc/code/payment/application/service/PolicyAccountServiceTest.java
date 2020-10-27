@@ -52,10 +52,10 @@ class PolicyAccountServiceTest {
 		var response = this.sut.findAll();
 		// then
 		verify(policyAccountLoadPort).findAll();
-		assertEquals(POLICY_NUMBER, response.get(0).getPolicyNumber());
-		assertEquals(POLICY_ACCOUNT_NUMBER, response.get(0).getPolicyAccountNumber());
-		assertEquals(CREATED_DATE, response.get(0).getCreated());
-		assertEquals(CREATED_DATE.plusDays(1L), response.get(0).getUpdated());
+		assertEquals(POLICY_NUMBER, response.getAccounts().get(0).getPolicyNumber());
+		assertEquals(POLICY_ACCOUNT_NUMBER, response.getAccounts().get(0).getPolicyAccountNumber());
+		assertEquals(CREATED_DATE, response.getAccounts().get(0).getCreated());
+		assertEquals(CREATED_DATE.plusDays(1L), response.getAccounts().get(0).getUpdated());
 	}
 	
     private PolicyAccount getPolicyAccount() {
