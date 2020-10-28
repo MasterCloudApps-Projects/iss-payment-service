@@ -21,6 +21,9 @@ spring:
         input:
           destination: POLICY_TOPIC
           content-type: application/json # it's redundant here, 'application/json' is the default
+          consumer: 
+             auto-commit-offset: false
+             ack-each-record: true
           group: eventServiceGroup
 
 management:

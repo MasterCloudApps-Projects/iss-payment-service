@@ -2,10 +2,14 @@ package es.urjc.code.payment.infrastructure.adapter.kafka;
 
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Sink;
+import org.springframework.kafka.support.Acknowledgment;
+import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +27,8 @@ import es.urjc.code.payment.service.api.v1.events.dto.PolicyDto;
 @Transactional
 @EnableBinding(Sink.class)
 public class PolicyEventConsumerAdapter implements PolicyEventConsumerPort {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(PolicyEventConsumerAdapter.class);
 	
 	private final PolicyAccountLoadPort policyAccountLoadPort;
 	private final PolicyAccountUpdatePort policyAccountUpdatePort;
@@ -43,6 +49,11 @@ public class PolicyEventConsumerAdapter implements PolicyEventConsumerPort {
               createAccount(payload.getPolicy());        	
             }
     	}
+    	Acknowledgment acknowledgment = event.getHeaders().get(KafkaHeaders.ACKNOWLEDGMENT, Acknowledgment.class);
+        if (acknowledgment != null) {
+        	LOGGER.info("Acknowledgment provided");
+            acknowledgment.acknowledge();
+        }
 	}
 	
     private void createAccount(PolicyDto policy) {
