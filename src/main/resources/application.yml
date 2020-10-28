@@ -14,16 +14,14 @@ spring:
     stream:
       kafka:
         binder:
-          brokers: ${KAFKA_HOST:localhost}:${KAFKA_PORT:9092}
+          brokers: ${KAFKA_HOST:localhost}:${KAFKA_PORT:29092}
+          auto-add-partitions: true # (*) all services create topic and add partitions
+          min-partition-count: 3    # (*)         
       bindings:
-        policy-registered-in:
-          destination: policy-registered
-          contentType: application/json
-          group: policy
-          consumer:
-            partitioned: true
-            concurrency: 5
-            auto.offset.reset: earliest
+        input:
+          destination: POLICY_TOPIC
+          content-type: application/json # it's redundant here, 'application/json' is the default
+          group: eventServiceGroup
 
 management:
   endpoints:
