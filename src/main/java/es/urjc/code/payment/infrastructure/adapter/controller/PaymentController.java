@@ -11,9 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import es.urjc.code.payment.application.port.incoming.FindAllPolicyAccountUseCase;
 import es.urjc.code.payment.application.port.incoming.GetAccountBalanceUSeCase;
-import es.urjc.code.payment.service.api.v1.dto.PolicyAccountDtoList;
 import es.urjc.code.payment.service.api.v1.dto.PolicyAccountBalanceDto;
-import es.urjc.code.payment.service.api.v1.dto.PolicyAccountDto;
+import es.urjc.code.payment.service.api.v1.dto.PolicyAccountDtoList;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;

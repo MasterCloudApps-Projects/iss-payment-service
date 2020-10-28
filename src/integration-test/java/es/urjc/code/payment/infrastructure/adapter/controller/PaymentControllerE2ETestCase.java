@@ -26,7 +26,7 @@ import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-public class PaymentControllerE2ETestCase extends BaseE2ETestCase {
+class PaymentControllerE2ETestCase extends BaseE2ETestCase {
 
 	public static final String POLICY_ACCOUNT_NUMBER = "1313123";
 	public static final String POLICY_NUMBER = "P1212121";
