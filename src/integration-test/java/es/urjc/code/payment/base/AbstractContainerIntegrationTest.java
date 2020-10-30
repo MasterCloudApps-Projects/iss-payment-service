@@ -4,46 +4,55 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.util.TestPropertyValues;
-import org.springframework.context.ApplicationContextInitializer;
-import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.KafkaContainer;
+import org.testcontainers.containers.Network;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 @Testcontainers
 public abstract class AbstractContainerIntegrationTest {
 	
-	protected static final PostgreSQLContainer postgresContainer = new PostgreSQLContainer("postgres:9.6.15").withDatabaseName("policy")
+	protected static final PostgreSQLContainer<?> postgresContainer = new PostgreSQLContainer("postgres:9.6.15").withDatabaseName("payment")
 			.withUsername("postgres").withPassword("password");
-	
-	protected static KafkaContainer kafka = new KafkaContainer();
+    private static final KafkaContainer kafkaContainer = new KafkaContainer("5.5.1");
+
+    @DynamicPropertySource
+    private static void dynamicProperties(DynamicPropertyRegistry registry) {
+        Network network = Network.SHARED;
+        
+        // PostgreSQL
+        postgresContainer.withNetwork(network).withNetworkAliases("postgresql")
+        .withUrlParam("characterEncoding", "UTF-8")
+        .withUrlParam("serverTimezone", "UTC");
+        postgresContainer.start();
+
+        // Kafka
+        kafkaContainer.withNetwork(network).withNetworkAliases("kafka")
+                .withExternalZookeeper("zookeeper:2181")
+                .withExposedPorts(9092, 9093);
+        kafkaContainer.start();
+        registry.add("spring.datasource.url", postgresContainer::getJdbcUrl);
+		registry.add("spring.datasource.password", postgresContainer::getPassword);
+		registry.add("spring.datasource.username", postgresContainer::getUsername);
+		registry.add("spring.kafka.bootstrap-servers",kafkaContainer::getBootstrapServers);
+    }
 
 	@BeforeAll
 	static void setUpAll() {
 		if (!postgresContainer.isRunning()) {
-		 postgresContainer.start();
+			 postgresContainer.start();
 		}
-		if (!kafka.isRunning()) {
-		 kafka.start();
-		}
+		if (!kafkaContainer.isRunning()) {
+			kafkaContainer.start();
+		}		
 	}
 	
 	@Test
 	void shouldBeRunning() {
 		assertTrue(postgresContainer.isRunning());
-		assertTrue(kafka.isRunning());
+		assertTrue(kafkaContainer.isRunning());
 	}
-	
-	public static class PropertiesInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
-		public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
-			TestPropertyValues
-					.of("spring.datasource.driver-class-name=" + postgresContainer.getDriverClassName(),
-							"spring.datasource.url=" + postgresContainer.getJdbcUrl(),
-							"spring.datasource.username=" + postgresContainer.getUsername(),
-							"spring.datasource.password=" + postgresContainer.getPassword(),
-							"spring.kafka.bootstrap-servers", kafka.getBootstrapServers())
-					.applyTo(configurableApplicationContext.getEnvironment());
-		}
-	}
+
 }

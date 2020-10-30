@@ -1,5 +1,6 @@
 package es.urjc.code.payment.infrastructure.adapter.repository;
 
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -42,12 +43,10 @@ class PolicyAccountRepositoryAdapterTest {
 	void shouldNotBeFindByPolicyAccountNumber() {
 		// given
 		when(policyAccountJpaRepository.findByPolicyAccountNumber(POLICY_ACCOUNT_NUMBER)).thenReturn(Optional.empty());
-		// when
-		assertThrows(EntityNotFoundException.class, () -> {
-			this.sut.findByPolicyAccountNumber(POLICY_ACCOUNT_NUMBER);
-		});
+		var response = this.sut.findByPolicyAccountNumber(POLICY_ACCOUNT_NUMBER);
 		// then
-		verify(policyAccountJpaRepository).findByPolicyAccountNumber(POLICY_ACCOUNT_NUMBER);		
+		verify(policyAccountJpaRepository).findByPolicyAccountNumber(POLICY_ACCOUNT_NUMBER);
+		assertNull(response);
 	}
 
 
@@ -71,11 +70,10 @@ class PolicyAccountRepositoryAdapterTest {
 		// given
 		when(policyAccountJpaRepository.findByPolicyNumber(POLICY_NUMBER)).thenReturn(Optional.empty());
 		// when
-		assertThrows(EntityNotFoundException.class, () -> {
-			this.sut.findByPolicyNumber(POLICY_NUMBER);
-		});
+		var response = this.sut.findByPolicyNumber(POLICY_NUMBER);
 		// then
 		verify(policyAccountJpaRepository).findByPolicyNumber(POLICY_NUMBER);
+		assertNull(response);
 	}
 
 

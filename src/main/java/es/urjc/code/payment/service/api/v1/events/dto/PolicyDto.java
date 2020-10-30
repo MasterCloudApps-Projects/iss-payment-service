@@ -2,6 +2,7 @@ package es.urjc.code.payment.service.api.v1.events.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.UUID;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -12,13 +13,15 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class PolicyDto {
 	
-	@NotEmpty
+	@NotNull
+	private UUID id;
+	@NotNull
     private String number;
 	@NotNull
     private LocalDate from;
 	@NotNull
     private LocalDate to;
-	@NotEmpty
+	@NotNull
     private String policyHolder;
 	@NotEmpty
     private String productCode;
@@ -26,8 +29,12 @@ public class PolicyDto {
     private BigDecimal totalPremium;
     @NotEmpty
     private String agentLogin;
-    
-    public String getNumber() {
+        
+    public UUID getId() {
+		return id;
+	}
+
+	public String getNumber() {
         return number;
     }
 
@@ -64,6 +71,7 @@ public class PolicyDto {
         PolicyDto that = (PolicyDto) o;
 
         return new EqualsBuilder()
+        		.append(id, that.id)
                 .append(number, that.number)
                 .append(from, that.from)
                 .append(to, that.to)
@@ -78,6 +86,7 @@ public class PolicyDto {
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
+        		.append(id)
                 .append(number)
                 .append(from)
                 .append(to)
@@ -86,14 +95,19 @@ public class PolicyDto {
                 .append(totalPremium)
                 .append(agentLogin)
                 .toHashCode();
-    }    
-
+    }
+    
     public static final class Builder {
 
         private final PolicyDto object;
 
         public Builder() {
             object = new PolicyDto();
+        }
+        
+        public Builder withId(UUID value) {
+            object.id = value;
+            return this;
         }
 
         public Builder withNumber(String value) {

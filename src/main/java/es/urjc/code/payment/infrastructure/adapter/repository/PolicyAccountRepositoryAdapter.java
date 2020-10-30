@@ -1,6 +1,7 @@
 package es.urjc.code.payment.infrastructure.adapter.repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,6 @@ import es.urjc.code.payment.application.domain.OutPayment;
 import es.urjc.code.payment.application.domain.PolicyAccount;
 import es.urjc.code.payment.application.port.outgoing.PolicyAccountLoadPort;
 import es.urjc.code.payment.application.port.outgoing.PolicyAccountUpdatePort;
-import es.urjc.code.payment.exception.EntityNotFoundException;
 import es.urjc.code.payment.infrastructure.adapter.repository.entity.AccountingEntryEntity;
 import es.urjc.code.payment.infrastructure.adapter.repository.entity.ExpectedPaymentEntity;
 import es.urjc.code.payment.infrastructure.adapter.repository.entity.InPaymentEntity;
@@ -35,18 +35,21 @@ public class PolicyAccountRepositoryAdapter implements PolicyAccountLoadPort, Po
 
 	@Override
 	public PolicyAccount findByPolicyAccountNumber(String policyAccountNumber) {
-		PolicyAccountEntity policyAccountEntity = policyAccountJpaRepository
-				.findByPolicyAccountNumber(policyAccountNumber).orElseThrow(() -> new EntityNotFoundException(
-						"Policy Account not found. Looking for account with number: " + policyAccountNumber));
-		return mapToPolicyAccount(policyAccountEntity);
+		Optional<PolicyAccountEntity> optEntity = policyAccountJpaRepository
+				.findByPolicyAccountNumber(policyAccountNumber);
+		if (optEntity.isPresent()) {
+			return mapToPolicyAccount(optEntity.get());
+		}
+		return null;
 	}
 
 	@Override
 	public PolicyAccount findByPolicyNumber(String policyNumber) {
-		PolicyAccountEntity policyAccountEntity = policyAccountJpaRepository.findByPolicyNumber(policyNumber)
-				.orElseThrow(() -> new EntityNotFoundException(
-						"Policy Account not found. Looking for policy with number: " + policyNumber));
-		return mapToPolicyAccount(policyAccountEntity);
+		Optional<PolicyAccountEntity> optEntity = policyAccountJpaRepository.findByPolicyNumber(policyNumber);
+		if (optEntity.isPresent()) {
+			return mapToPolicyAccount(optEntity.get());
+		}
+		return null;
 	}
 
 	@Override

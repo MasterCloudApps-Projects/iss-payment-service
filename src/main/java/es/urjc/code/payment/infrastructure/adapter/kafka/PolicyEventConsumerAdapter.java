@@ -42,6 +42,7 @@ public class PolicyEventConsumerAdapter implements PolicyEventConsumerPort {
     @StreamListener(Sink.INPUT)
 	@Override
 	public void process(Message<PolicyEvent> event)  {
+    	LOGGER.info("event received {}", event);
     	PolicyEvent payload =  event.getPayload();
     	if (EventType.REGISTERED.equals(payload.getEventType())) {
     		PolicyAccount account = policyAccountLoadPort.findByPolicyNumber(payload.getPolicy().getNumber());

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.urjc.code.payment.application.port.incoming.FindAllPolicyAccountUseCase;
-import es.urjc.code.payment.application.port.incoming.GetAccountBalanceUSeCase;
+import es.urjc.code.payment.application.port.incoming.GetAccountBalanceUseCase;
 import es.urjc.code.payment.service.api.v1.dto.PolicyAccountBalanceDto;
 import es.urjc.code.payment.service.api.v1.dto.PolicyAccountDtoList;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,12 +27,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public class PaymentController {
 
 	private final FindAllPolicyAccountUseCase findAllPolicyAccountUseCase;
-	private final GetAccountBalanceUSeCase getAccountBalanceUSeCase;
+	private final GetAccountBalanceUseCase getAccountBalanceUseCase;
 	
 	@Autowired
-	public PaymentController(FindAllPolicyAccountUseCase findAllPolicyAccountUseCase,GetAccountBalanceUSeCase getAccountBalanceUSeCase) {
+	public PaymentController(FindAllPolicyAccountUseCase findAllPolicyAccountUseCase,GetAccountBalanceUseCase getAccountBalanceUseCase) {
 		this.findAllPolicyAccountUseCase = findAllPolicyAccountUseCase;
-		this.getAccountBalanceUSeCase = getAccountBalanceUSeCase;
+		this.getAccountBalanceUseCase = getAccountBalanceUseCase;
 	}
 	
 	@Operation(summary = "Find all policy account", description = "Find all policy account", tags = { "payment" })
@@ -49,6 +49,6 @@ public class PaymentController {
 			@ApiResponse(responseCode = "404", description = "Product not found") })
 	@GetMapping("/api/v1/accounts/{accountNumber}")
 	public ResponseEntity<PolicyAccountBalanceDto> accountBalance(@Parameter(description = "Account number. Cannot be empty.", required = true) @PathVariable("accountNumber") @NotEmpty String accountNumber) {
-		return ResponseEntity.status(HttpStatus.OK).body(getAccountBalanceUSeCase.getAccountBalance(accountNumber));
+		return getAccountBalanceUseCase.getAccountBalance(accountNumber).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
 	}
 }

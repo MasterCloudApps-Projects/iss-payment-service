@@ -1,6 +1,7 @@
 package es.urjc.code.payment.application.service;
 
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import es.urjc.code.payment.application.domain.PolicyAccount;
 import es.urjc.code.payment.application.port.incoming.FindAllPolicyAccountUseCase;
-import es.urjc.code.payment.application.port.incoming.GetAccountBalanceUSeCase;
+import es.urjc.code.payment.application.port.incoming.GetAccountBalanceUseCase;
 import es.urjc.code.payment.application.port.outgoing.PolicyAccountLoadPort;
 import es.urjc.code.payment.service.api.v1.dto.PolicyAccountDtoList;
 import es.urjc.code.payment.service.api.v1.dto.PolicyAccountBalanceDto;
@@ -17,7 +18,7 @@ import es.urjc.code.payment.service.api.v1.dto.PolicyAccountDto;
 
 @Service
 @Transactional
-public class PolicyAccountService implements FindAllPolicyAccountUseCase ,GetAccountBalanceUSeCase {
+public class PolicyAccountService implements FindAllPolicyAccountUseCase ,GetAccountBalanceUseCase {
 	
 	private final PolicyAccountLoadPort policyAccountLoadPort;
 	
@@ -27,15 +28,15 @@ public class PolicyAccountService implements FindAllPolicyAccountUseCase ,GetAcc
 	}
 
 	@Override
-	public PolicyAccountBalanceDto getAccountBalance(String accountNumber) {
+	public Optional<PolicyAccountBalanceDto> getAccountBalance(String accountNumber) {
 		PolicyAccount account = policyAccountLoadPort.findByPolicyAccountNumber(accountNumber);
-		return new PolicyAccountBalanceDto.Builder()
+		return Optional.ofNullable(new PolicyAccountBalanceDto.Builder()
 				                          .withPolicyNumber(account.getPolicyNumber())
 				                          .withPolicyAccountNumber(account.getPolicyAccountNumber())
 				                          .withBalance(account.balanceAt(LocalDate.now()))
 				                          .withCreated( account.getCreated())
 				                          .withUpdated(account.getUpdated())
-				                          .build();
+				                          .build());
 	}
 
 	@Override
