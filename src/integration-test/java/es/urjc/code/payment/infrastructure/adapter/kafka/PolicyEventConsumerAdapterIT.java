@@ -1,20 +1,14 @@
 package es.urjc.code.payment.infrastructure.adapter.kafka;
 
-import static org.awaitility.Awaitility.await;
-import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
-import java.util.concurrent.Callable;
-import java.util.concurrent.TimeUnit;
 
-import org.junit.Rule;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.system.OutputCaptureRule;
 import org.springframework.cloud.stream.messaging.Sink;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
@@ -31,7 +25,7 @@ import es.urjc.code.payment.service.api.v1.events.dto.PolicyDto;
 
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @DirtiesContext
-public class PolicyEventConsumerAdapterIT extends AbstractContainerIntegrationTest {
+class PolicyEventConsumerAdapterIT extends AbstractContainerIntegrationTest {
 
 	private static final String POLICY_HOLDER = "François Poirier";
 	private static final String PRODUCT_CODE = "CAR";
@@ -46,7 +40,7 @@ public class PolicyEventConsumerAdapterIT extends AbstractContainerIntegrationTe
 	private PolicyAccountJpaRepository policyAccountJpaRepository;
 		
 	@Test
-	public void shouldConsumePolicyEventAndSave() {
+	void shouldConsumePolicyEventAndSave() {
 		// given
 		var optPolicyAccount = policyAccountJpaRepository.findByPolicyNumber(POLICY_NUMBER);
 		assertTrue(!optPolicyAccount.isPresent());
