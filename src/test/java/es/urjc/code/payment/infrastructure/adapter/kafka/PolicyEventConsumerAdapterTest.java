@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 
@@ -46,7 +47,7 @@ class PolicyEventConsumerAdapterTest {
 		when(policyAccountLoadPort.findByPolicyNumber(POLICY_NUMBER)).thenReturn(null);
 		doNothing().when(policyAccountUpdatePort).save(policyAccount);
 		// when
-		this.sut.process(message);
+		this.sut.process(message,Mockito.mock(Acknowledgment.class));
 		// then
 		verify(policyAccountLoadPort).findByPolicyNumber(POLICY_NUMBER);
 		verify(policyAccountUpdatePort).save(any());		
@@ -60,7 +61,7 @@ class PolicyEventConsumerAdapterTest {
 		final Message<PolicyEvent> message = MessageBuilder.withPayload(event).build();
 		when(policyAccountLoadPort.findByPolicyNumber(POLICY_NUMBER)).thenReturn(new PolicyAccount.Builder().build());
 		// when
-		this.sut.process(message);
+		this.sut.process(message,Mockito.mock(Acknowledgment.class));
 		// then
 		verify(policyAccountLoadPort).findByPolicyNumber(POLICY_NUMBER);
 		verify(policyAccountUpdatePort,never()).save(any());
@@ -73,7 +74,7 @@ class PolicyEventConsumerAdapterTest {
 		final PolicyEvent event = new PolicyEvent.Builder().withPolicy(dto).withEventType(EventType.TERMINATED).build();
 		final Message<PolicyEvent> message = MessageBuilder.withPayload(event).build();
 		// when
-		this.sut.process(message);
+		this.sut.process(message,Mockito.mock(Acknowledgment.class));
 		// then
 		verify(policyAccountLoadPort,never()).findByPolicyNumber(POLICY_NUMBER);
 		verify(policyAccountUpdatePort,never()).save(any());	

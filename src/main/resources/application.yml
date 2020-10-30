@@ -12,18 +12,21 @@ spring:
     jpa.database-platform: org.hibernate.dialect.PostgreSQL9Dialect
   cloud:
     stream:
+      default-binder: kafka
       kafka:
         binder:
           brokers: ${KAFKA_HOST:localhost}:${KAFKA_PORT:29092}
           auto-add-partitions: true # (*) all services create topic and add partitions
           min-partition-count: 3    # (*)         
+        bindings:
+          input:
+             consumer: 
+                auto-commit-offset: false
+                ack-each-record: true
       bindings:
         input:
           destination: POLICY_TOPIC
           content-type: application/json # it's redundant here, 'application/json' is the default
-          consumer: 
-             auto-commit-offset: false
-             ack-each-record: true
           group: eventServiceGroup
 
 management:

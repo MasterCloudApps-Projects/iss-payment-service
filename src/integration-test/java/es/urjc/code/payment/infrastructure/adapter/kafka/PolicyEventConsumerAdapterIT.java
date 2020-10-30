@@ -7,9 +7,12 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.stream.messaging.Sink;
+import org.springframework.kafka.support.Acknowledgment;
+import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.support.MessageBuilder;
@@ -53,6 +56,7 @@ class PolicyEventConsumerAdapterIT extends AbstractContainerIntegrationTest {
 		Message<PolicyEvent> message = MessageBuilder.withPayload(event)
 				.setHeader("partitionKey", policyDto.getId())
 				.setHeader(MessageHeaders.CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON)
+				.setHeader(KafkaHeaders.ACKNOWLEDGMENT,Mockito.mock(Acknowledgment.class))
 				.build();
 		this.channels.input().send(message);
 		// then
