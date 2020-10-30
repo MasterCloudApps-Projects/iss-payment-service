@@ -29,6 +29,7 @@ class PolicyEventConsumerAdapterTest {
 	private PolicyAccountLoadPort policyAccountLoadPort;
 	private PolicyAccountUpdatePort policyAccountUpdatePort;
 	private PolicyEventConsumerAdapter sut;
+	private Acknowledgment acknowledgment = Mockito.mock(Acknowledgment.class);
 	
 	@BeforeEach
 	public void setUp() {
@@ -47,7 +48,7 @@ class PolicyEventConsumerAdapterTest {
 		when(policyAccountLoadPort.findByPolicyNumber(POLICY_NUMBER)).thenReturn(null);
 		doNothing().when(policyAccountUpdatePort).save(policyAccount);
 		// when
-		this.sut.process(message,Mockito.mock(Acknowledgment.class));
+		this.sut.process(message,acknowledgment);
 		// then
 		verify(policyAccountLoadPort).findByPolicyNumber(POLICY_NUMBER);
 		verify(policyAccountUpdatePort).save(any());		
@@ -61,7 +62,7 @@ class PolicyEventConsumerAdapterTest {
 		final Message<PolicyEvent> message = MessageBuilder.withPayload(event).build();
 		when(policyAccountLoadPort.findByPolicyNumber(POLICY_NUMBER)).thenReturn(new PolicyAccount.Builder().build());
 		// when
-		this.sut.process(message,Mockito.mock(Acknowledgment.class));
+		this.sut.process(message,acknowledgment);
 		// then
 		verify(policyAccountLoadPort).findByPolicyNumber(POLICY_NUMBER);
 		verify(policyAccountUpdatePort,never()).save(any());
@@ -74,7 +75,7 @@ class PolicyEventConsumerAdapterTest {
 		final PolicyEvent event = new PolicyEvent.Builder().withPolicy(dto).withEventType(EventType.TERMINATED).build();
 		final Message<PolicyEvent> message = MessageBuilder.withPayload(event).build();
 		// when
-		this.sut.process(message,Mockito.mock(Acknowledgment.class));
+		this.sut.process(message,acknowledgment);
 		// then
 		verify(policyAccountLoadPort,never()).findByPolicyNumber(POLICY_NUMBER);
 		verify(policyAccountUpdatePort,never()).save(any());	
