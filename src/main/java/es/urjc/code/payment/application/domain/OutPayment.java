@@ -4,9 +4,14 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+@Entity
+@DiscriminatorValue(value = "outpayment")
 public class OutPayment extends AccountingEntry {
 
 	public OutPayment() {
@@ -35,7 +40,6 @@ public class OutPayment extends AccountingEntry {
 
         return new EqualsBuilder()
                 .append(id, that.id)
-                .append(policyAccount, that.policyAccount)
                 .append(amount, that.amount)
                 .append(creationDate, that.creationDate)
                 .append(effectiveDate, that.effectiveDate)
@@ -47,7 +51,6 @@ public class OutPayment extends AccountingEntry {
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
                 .append(id)
-                .append(policyAccount)
                 .append(amount)
                 .append(creationDate)
                 .append(effectiveDate)

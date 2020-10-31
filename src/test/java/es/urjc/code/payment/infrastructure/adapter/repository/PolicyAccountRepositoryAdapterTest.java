@@ -1,16 +1,13 @@
 package es.urjc.code.payment.infrastructure.adapter.repository;
 
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -18,11 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import es.urjc.code.payment.application.domain.PolicyAccount;
-import es.urjc.code.payment.exception.EntityNotFoundException;
-import es.urjc.code.payment.infrastructure.adapter.repository.entity.ExpectedPaymentEntity;
-import es.urjc.code.payment.infrastructure.adapter.repository.entity.InPaymentEntity;
-import es.urjc.code.payment.infrastructure.adapter.repository.entity.OutPaymentEntity;
-import es.urjc.code.payment.infrastructure.adapter.repository.entity.PolicyAccountEntity;
 import es.urjc.code.payment.infrastructure.adapter.repository.jpa.PolicyAccountJpaRepository;
 
 class PolicyAccountRepositoryAdapterTest {
@@ -53,7 +45,7 @@ class PolicyAccountRepositoryAdapterTest {
 	@Test
 	void shouldBeFindByPolicyAccountNumber() {
 		// given
-		when(policyAccountJpaRepository.findByPolicyAccountNumber(POLICY_ACCOUNT_NUMBER)).thenReturn(Optional.of(getPolicyAccountEntity()));
+		when(policyAccountJpaRepository.findByPolicyAccountNumber(POLICY_ACCOUNT_NUMBER)).thenReturn(Optional.of(getPolicyAccount()));
 		// when
 		var response = this.sut.findByPolicyAccountNumber(POLICY_ACCOUNT_NUMBER);
 		// then
@@ -80,7 +72,7 @@ class PolicyAccountRepositoryAdapterTest {
 	@Test
 	void shouldBeFindByPolicyNumber() {
 		// given
-		when(policyAccountJpaRepository.findByPolicyNumber(POLICY_NUMBER)).thenReturn(Optional.of(getPolicyAccountEntity()));
+		when(policyAccountJpaRepository.findByPolicyNumber(POLICY_NUMBER)).thenReturn(Optional.of(getPolicyAccount()));
 		// when
 		var response = this.sut.findByPolicyNumber(POLICY_NUMBER);
 		// then
@@ -94,10 +86,9 @@ class PolicyAccountRepositoryAdapterTest {
 	@Test
 	void shouldBeSavePolicyAccount() {
 		// given
-		var entity = getPolicyAccountEntity(); 
-		when(policyAccountJpaRepository.save(entity)).thenReturn(entity);
+		when(policyAccountJpaRepository.save(any())).thenReturn(getPolicyAccount());
 		// when
-		this.sut.save(getPolicyAccount());
+		this.sut.save(any());
 		// then
 		verify(policyAccountJpaRepository).save(any());
 	}
@@ -105,7 +96,7 @@ class PolicyAccountRepositoryAdapterTest {
 	@Test
 	void shouldBeFindAll() {
 		// given
-		final var policyAccountEntities = Arrays.asList(getPolicyAccountEntity());
+		final var policyAccountEntities = Arrays.asList(getPolicyAccount());
 		when(policyAccountJpaRepository.findAll()).thenReturn(policyAccountEntities);
 		// when
 		var response = this.sut.findAll();
@@ -125,30 +116,5 @@ class PolicyAccountRepositoryAdapterTest {
 				                .withUpdated(CREATED_DATE.plusDays(1L))
     			                .build();
     }
-    
-	private PolicyAccountEntity getPolicyAccountEntity() {
-		
-		return new PolicyAccountEntity.Builder()
-				                      .withPolicyAccountNumber(POLICY_ACCOUNT_NUMBER)
-				                      .withPolicyNumber(POLICY_NUMBER)
-				                      .withCreated(CREATED_DATE)
-				                      .withUpdated(CREATED_DATE.plusDays(1L))
-				                      .withEntries(new HashSet<>(Arrays.asList(getExpectedPaymentEntity(),getInPaymentEntity(),getOutPaymentEntity())))
-				                      .build();
-	}
 
-	private ExpectedPaymentEntity getExpectedPaymentEntity() {
-		return new ExpectedPaymentEntity.Builder().withAmount(new BigDecimal(10))
-		.withCreationDate(CREATED_DATE).withEffectiveDate(CREATED_DATE).build();
-	}
-
-	private InPaymentEntity getInPaymentEntity() {
-		return new InPaymentEntity.Builder().withAmount(new BigDecimal(10))
-		.withCreationDate(CREATED_DATE).withEffectiveDate(CREATED_DATE).build();
-	}
-	
-	private OutPaymentEntity getOutPaymentEntity() {
-		return new OutPaymentEntity.Builder().withAmount(new BigDecimal(10))
-		.withCreationDate(CREATED_DATE).withEffectiveDate(CREATED_DATE).build();
-	}
 }

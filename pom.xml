@@ -24,7 +24,7 @@
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 		<testcontainer.version>1.14.3</testcontainer.version>
-		<code.coverage.exclusions>**/api/**,**/entity/**,**/domain/**,**/dto/**,**/payment/Application.java,**/config/OpenApiConfig.java</code.coverage.exclusions>
+		<code.coverage.exclusions>**/api/**,**/domain/**,**/dto/**,**/payment/Application.java,**/config/OpenApiConfig.java</code.coverage.exclusions>
 	</properties>
 
 	<dependencies>

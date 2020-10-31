@@ -2,6 +2,7 @@ package es.urjc.code.payment.infrastructure.adapter.repository.jpa;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -12,8 +13,11 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ContextConfiguration;
 
+import es.urjc.code.payment.application.domain.ExpectedPayment;
+import es.urjc.code.payment.application.domain.InPayment;
+import es.urjc.code.payment.application.domain.OutPayment;
+import es.urjc.code.payment.application.domain.PolicyAccount;
 import es.urjc.code.payment.base.AbstractContainerBaseTest;
-import es.urjc.code.payment.infrastructure.adapter.repository.entity.PolicyAccountEntity;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
@@ -31,36 +35,54 @@ class PolicyAccountJpaRepositoryIT extends AbstractContainerBaseTest {
 	
 	@BeforeEach
 	public void setUp() {
-		PolicyAccountEntity entity = new PolicyAccountEntity.Builder()
+		PolicyAccount entity = new PolicyAccount.Builder()
 				                             .withPolicyNumber(POLICY_NUMBER)
 				                             .withPolicyAccountNumber(POLICY_ACCOUNT_NUMBER)
 				                             .withCreated(CREATED_DATE)
 				                             .withUpdated(CREATED_DATE.plusDays(1L))
 				                             .build();
+		entity.addEntry(getExpectedPayment());
+		entity.addEntry(getInPayment());
+		entity.addEntry(getOutPayment());
 		policyAccountJpaRepository.save(entity);
 	}
 	
 	@Test
-	void testWhenFindByPolicyAccountNumberThenReturnEntity() {
+	void testWhenFindByPolicyAccountNumberThenReturn() {
 		var p = policyAccountJpaRepository.findByPolicyAccountNumber(POLICY_ACCOUNT_NUMBER);
 		assertTrue(p.isPresent());
 	}
 	
 	@Test
-	void testWhenFindByPolicyAccountNumberThenNotReturnEntity() {
+	void testWhenFindByPolicyAccountNumberThenNotReturn() {
 		var p = policyAccountJpaRepository.findByPolicyAccountNumber(POLICY_ACCOUNT_NUMBER_NOT_EXIST);
 		assertTrue(!p.isPresent());
 	}
 	
 	@Test
-	void testWhenFindByPolicyNumberThenReturnEntity() {
+	void testWhenFindByPolicyNumberThenReturn() {
 		var p = policyAccountJpaRepository.findByPolicyNumber(POLICY_NUMBER);
 		assertTrue(p.isPresent());
 	}
 	
 	@Test
-	void testWhenFindByPolicyNumberThenNotReturnEntity() {
+	void testWhenFindByPolicyNumberThenNotReturn() {
 		var p = policyAccountJpaRepository.findByPolicyAccountNumber(POLICY_NUMBER_NOT_EXIST);
 		assertTrue(!p.isPresent());
+	}
+	
+	private ExpectedPayment getExpectedPayment() {
+		return new ExpectedPayment.Builder().withAmount(new BigDecimal(10))
+		.withCreationDate(CREATED_DATE).withEffectiveDate(CREATED_DATE).build();
+	}
+
+	private InPayment getInPayment() {
+		return new InPayment.Builder().withAmount(new BigDecimal(10))
+		.withCreationDate(CREATED_DATE).withEffectiveDate(CREATED_DATE).build();
+	}
+	
+	private OutPayment getOutPayment() {
+		return new OutPayment.Builder().withAmount(new BigDecimal(10))
+		.withCreationDate(CREATED_DATE).withEffectiveDate(CREATED_DATE).build();
 	}
 }

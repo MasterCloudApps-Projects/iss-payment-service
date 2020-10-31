@@ -7,8 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.actuate.health.Health;
 
-import es.urjc.code.payment.health.CustomHealthIndicator;
-
 class CustomHealthIndicatorTest {
 
 	private static final String SERVICE_AVAILABLE = " Available";

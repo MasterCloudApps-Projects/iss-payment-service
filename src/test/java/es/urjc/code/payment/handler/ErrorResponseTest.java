@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import es.urjc.code.payment.handler.ErrorResponse;
-
 class ErrorResponseTest {
 
 	private static final String DEFAULT_MESSAGE = "Default message";

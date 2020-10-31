@@ -9,8 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import es.urjc.code.payment.handler.RestExceptionHandler;
-
 class RestExceptionHandlerTest {
 
     private TestController testController;

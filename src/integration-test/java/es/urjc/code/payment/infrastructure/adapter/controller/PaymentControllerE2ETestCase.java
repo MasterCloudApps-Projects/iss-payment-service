@@ -18,7 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 
-import es.urjc.code.payment.infrastructure.adapter.repository.entity.PolicyAccountEntity;
+import es.urjc.code.payment.application.domain.PolicyAccount;
 import es.urjc.code.payment.infrastructure.adapter.repository.jpa.PolicyAccountJpaRepository;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
@@ -44,7 +44,7 @@ class PaymentControllerE2ETestCase extends BaseE2ETestCase {
 		
 		var pa = policyAccountJpaRepository.findByPolicyAccountNumber(POLICY_ACCOUNT_NUMBER);
 		if (!pa.isPresent()) {
-			PolicyAccountEntity entity = new PolicyAccountEntity.Builder()
+			PolicyAccount entity = new PolicyAccount.Builder()
 	                .withPolicyNumber(POLICY_NUMBER)
 	                .withPolicyAccountNumber(POLICY_ACCOUNT_NUMBER)
 	                .withCreated(CREATED_DATE)
