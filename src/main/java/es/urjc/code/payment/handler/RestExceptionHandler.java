@@ -3,6 +3,7 @@ package es.urjc.code.payment.handler;
 import java.io.IOException;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -23,6 +24,15 @@ public class RestExceptionHandler
         		                .withStatus(400)
         		                .withMessage("Bad Request")
         		                .build();
+    }
+    
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse validationError(Exception ex) {
+    	return new ErrorResponse.Builder()
+                .withStatus(400)
+                .withMessage(ex.getMessage())
+                .build();
     }
     
     @ExceptionHandler(value = { EntityNotFoundException.class })
