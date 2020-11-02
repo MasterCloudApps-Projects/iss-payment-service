@@ -79,7 +79,7 @@ class RestExceptionHandlerTest {
     }
     
     @Test
-    public void testValidationError() throws Exception {
+    void testValidationError() throws Exception {
     	String content = new ObjectMapper().writeValueAsString( new es.urjc.code.payment.handler.TestController.TestFieldValidation());
     	MvcResult result = mockMvc.perform(post("/test/validation-exception").contentType(MediaType.APPLICATION_JSON).content(content))
         .andExpect(status().isBadRequest())
