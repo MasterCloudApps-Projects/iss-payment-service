@@ -16,11 +16,10 @@ This module managed policy accounts. Once the policy was created, an account was
 
 This is a spring boot project that exposes different endpoints and data can be persisted in postgresql database.
 
-In the Integration Tests, the Testcontainers Java library is used for starting postgresql in a docker container.
+In the Integration Tests, the Testcontainers Java library is used for starting postgresql and kafka in a docker container.
 
 ## How to run Application
 
-#### Option 1:
 Running application from command line using Docker, this is the cleanest way.
 In order for this approach to work, of course, you need to have Docker installed in your local environment.
 
@@ -29,24 +28,6 @@ In order for this approach to work, of course, you need to have Docker installed
 * Application will be running on: http://localhost:8084
 * To stop it you can open other terminal in the same directory, and then run the following command:<br/>
     ```docker-compose -f docker/docker-compose.yml down```
-
-#### Option 2:
-In case you have postgresql installed locally, and you want to run from IDE
-
-* Import the testcontainers-demo application as a Maven project to your IDE.
-* Run maven clean install command to build the project.
-* Then you can search for Application.java class and run it with profile 'dev'
-* Application will be running on: http://localhost:8084
-
-#### Option 3:
-In case you don't have postgresql installed locally, and you want to run from IDE
-   
-* Import the testcontainers-demo application as a Maven project to your IDE.
-* Run maven clean install command to build the project.
-* From the command line run the following command to have postgresql running in a docker container:<br/>
-    ```docker run -d -p 5432:5432 --name postgres_db postgres:9.6-alpine```
-* Then you can search for Application.java class and run it with profile 'dev'
-* Application will be running on: http://localhost:8084
 
 ## How to run the Unit Test
 
