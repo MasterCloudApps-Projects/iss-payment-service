@@ -43,5 +43,5 @@ In order for this approach to work, of course, you need to have Docker installed
 #### Option 2:
 * Import the testcontainers-demo application as a Maven project to your IDE.
 * Run maven clean install command to build the project.
-* Then you can search for XXXIT.java class and run it as a junit test.
+* Then you can search for XXXIT.java or XXXE2ETestCase.java class and run it as a junit test.
 
