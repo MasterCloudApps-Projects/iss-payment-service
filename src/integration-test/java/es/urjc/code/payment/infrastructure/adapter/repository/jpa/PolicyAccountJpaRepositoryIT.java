@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
 import es.urjc.code.payment.application.domain.ExpectedPayment;
@@ -22,6 +23,7 @@ import es.urjc.code.payment.base.AbstractContainerBaseTest;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @ContextConfiguration(initializers = { AbstractContainerBaseTest.PropertiesInitializer.class })
+@ActiveProfiles("test")
 class PolicyAccountJpaRepositoryIT extends AbstractContainerBaseTest {
 	
 	private static final String POLICY_ACCOUNT_NUMBER_NOT_EXIST = "NOT_EXIST";

@@ -11,12 +11,9 @@ spring:
       initialization-fail-timeout: 0
     jpa.database-platform: org.hibernate.dialect.PostgreSQL9Dialect
   cloud:
-    loadbalancer:
-      ribbon:
-        enabled: false
-    kubernetes:
+    kubernetes:  
       discovery:
-        all-namespaces: true
+          enabled: false  
     stream:
       default-binder: kafka
       kafka:

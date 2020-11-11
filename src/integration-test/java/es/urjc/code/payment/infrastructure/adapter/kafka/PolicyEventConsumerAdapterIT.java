@@ -17,6 +17,7 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.util.MimeTypeUtils;
 
 import es.urjc.code.payment.Application;
@@ -28,6 +29,7 @@ import es.urjc.code.payment.service.api.v1.events.dto.PolicyDto;
 
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @DirtiesContext
+@ActiveProfiles("test")
 class PolicyEventConsumerAdapterIT extends AbstractContainerIntegrationTest {
 
 	private static final String POLICY_HOLDER = "François Poirier";

@@ -17,15 +17,18 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.context.ActiveProfiles;
 
 import es.urjc.code.payment.application.domain.PolicyAccount;
 import es.urjc.code.payment.infrastructure.adapter.repository.jpa.PolicyAccountJpaRepository;
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
 class PaymentControllerE2ETestCase extends BaseE2ETestCase {
 
 	public static final String POLICY_ACCOUNT_NUMBER = "1313123";
@@ -58,7 +61,7 @@ class PaymentControllerE2ETestCase extends BaseE2ETestCase {
 	void shouldBeFindAllAccounts() {
         //when
         ValidatableResponse response = given()
-                .contentType("application/json")
+                .contentType(ContentType.JSON)
                 .when()
                 .get(V1_ACCOUNTS_ENDPOINT.build())
                 .prettyPeek()
