@@ -11,6 +11,8 @@ We decided to implement it in an extremely simplified version of an insurance sa
 * Service discovery
 * Running background jobs
 
+![Architecture](https://github.com/MasterCloudApps-Projects/iss-payment-service/blob/master/images/iss-architecture.jpg?raw=true)
+
 The iss-payment-service microservice is responsible to created Policy Account, showed Policy Account list, and registered payments from the bank statement file.
 This module managed policy accounts. Once the policy was created, an account was created in this service with the expected income. Payment-service also had an implementation of a scheduled process in which a CSV file with payments was imported, and payments were assigned to policy accounts. This component showed asynchronous communication between services using Kafka and had the ability to create background jobs using Spring boot. It also allowed for the database to be accessed using JPA.
 
