@@ -21,7 +21,7 @@ spring:
       default-binder: kafka
       kafka:
         binder:
-          brokers: ${KAFKA_HOST:localhost}:${KAFKA_PORT:29092}
+          brokers: ${KAFKA_HOST:localhost}:${KAFKA_PORT:9092}
           auto-add-partitions: true # (*) all services create topic and add partitions
           min-partition-count: 3    # (*)         
         bindings:
@@ -31,7 +31,7 @@ spring:
                 ack-each-record: true
       bindings:
         input:
-          destination: POLICY_TOPIC
+          destination: policy-topic
           content-type: application/json # it's redundant here, 'application/json' is the default
           group: eventServiceGroup
 
