@@ -7,5 +7,5 @@ RUN mvn -B -f pom.xml clean package -DskipTests
 
 FROM openjdk:11-jdk-slim
 COPY --from=BUILD_STAGE /workspace/target/iss-payment-service*.jar iss-payment-service.jar
-EXPOSE 8082
+EXPOSE 8084
 ENTRYPOINT ["java","-jar","iss-payment-service.jar"]
