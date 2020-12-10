@@ -1,0 +1,11 @@
+databaseChangeLog:
+        
+- changeSet:
+     id:  05_modify_policy_account_number_length  
+     author:  fpoirier 
+     changes:  
+     -  modifyDataType:  
+         columnName: policy_number  
+         newDataType: VARCHAR(100)  
+         schemaName: payment  
+         tableName: policy_account

@@ -5,3 +5,5 @@ databaseChangeLog:
       file: db/changelog/ddl-payment-v.0.0.2.yaml
   - include:
       file: db/changelog/ddl-payment-v.0.0.3.yaml
+  - include:
+      file: db/changelog/ddl-payment-v.0.0.4.yaml
