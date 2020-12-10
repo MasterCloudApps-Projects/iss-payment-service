@@ -20,7 +20,7 @@ spring:
         binder:
           brokers: ${KAFKA_HOST:localhost}:${KAFKA_PORT:9092}
           auto-add-partitions: true # (*) all services create topic and add partitions
-          min-partition-count: 3    # (*)         
+          min-partition-count: 5    # (*)         
         bindings:
           input:
              consumer: 
@@ -30,7 +30,7 @@ spring:
         input:
           destination: POLICY_TOPIC
           content-type: application/json # it's redundant here, 'application/json' is the default
-          group: eventServiceGroup
+          group: policy
 
 management:
   endpoint:
