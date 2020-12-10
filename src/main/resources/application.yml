@@ -27,7 +27,7 @@ spring:
         binder:
           brokers: ${KAFKA_HOST:localhost}:${KAFKA_PORT:9092}
           auto-add-partitions: true # (*) all services create topic and add partitions
-          min-partition-count: 3    # (*)         
+          min-partition-count: 2    # (*)         
         bindings:
           input:
              consumer: 
