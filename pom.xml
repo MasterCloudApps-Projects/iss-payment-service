@@ -10,7 +10,7 @@
 
 	<groupId>es.urjc.code</groupId>
 	<artifactId>iss-payment-service</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1-SNAPSHOT</version>
 
 	<name>iss-payment-service</name>
 	<description>Payment service</description>
@@ -368,7 +368,7 @@
 	</profiles>
 	<scm>
 		<developerConnection>scm:git:https://github.com/${git.repository}.git</developerConnection>
-	  <tag>v1.0.0</tag>
+	  <tag>HEAD</tag>
   </scm>
 	<distributionManagement>
 		<repository>
