@@ -1,5 +1,6 @@
 package es.urjc.code.payment.infrastructure.adapter.kafka;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -56,7 +57,13 @@ public class PolicyEventConsumerAdapter implements PolicyEventConsumerPort {
 	}
 	
     private void createAccount(PolicyDto policy) {
-        PolicyAccount newAccount = new PolicyAccount.Builder().withPolicyNumber(policy.getNumber()).withPolicyAccountNumber(UUID.randomUUID().toString()).build();
+    	var currentDate = LocalDate.now();
+        PolicyAccount newAccount = new PolicyAccount.Builder()
+        		                                    .withPolicyNumber(policy.getNumber())
+        		                                    .withPolicyAccountNumber(UUID.randomUUID().toString())
+        		                                    .withCreated(currentDate)
+        		                                    .withUpdated(currentDate)
+        		                                    .build();
         newAccount.expectedPayment(policy.getTotalPremium(),policy.getFrom());
         policyAccountUpdatePort.save(newAccount);
     }
